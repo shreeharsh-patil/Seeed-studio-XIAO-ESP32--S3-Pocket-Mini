@@ -1,0 +1,5 @@
+Firmware preview request
+Board: original-xiao-esp32s3
+Version: v0.1.0-preview.1
+Workflow: .github/workflows/publish-firmware-preview.yml
+Publishing policy: experimental prerelease; build and image validation must pass.
