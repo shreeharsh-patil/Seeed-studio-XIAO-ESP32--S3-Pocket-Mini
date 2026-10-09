@@ -1,0 +1,131 @@
+name: Publish XIAO ESP32-S3 firmware preview
+on:
+  push:
+    branches: [main]
+    paths: [.github/firmware-preview.request]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: xiao-firmware-preview
+  cancel-in-progress: false
+
+jobs:
+  firmware:
+    runs-on: ubuntu-latest
+    container:
+      image: espressif/idf:v6.1
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v7
+      - name: Test and build correct XIAO board
+        shell: bash
+        run: |
+          set -euo pipefail
+          source "$IDF_PATH/export.sh"
+          python -m unittest discover -s scripts/tests -v
+          python scripts/build.py seeed-xiao-esp32s3-pocket-ai --name seeed-xiao-esp32s3-pocket-ai --language en-US --wake-word disabled
+      - name: Validate target, image and create flash package
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          config = Path("sdkconfig").read_text()
+          description = json.loads(Path("build/project_description.json").read_text())
+          if description.get("target") != "esp32s3":
+              raise SystemExit("Wrong chip: this release must target esp32s3")
+          if description.get("project_name") != "seeed-xiao-esp32s3-pocket-ai":
+              raise SystemExit("Wrong app identity / OTA target")
+          required=("CONFIG_ESPTOOLPY_FLASHSIZE_8MB=y", "CONFIG_SPIRAM=y")
+          for field in required:
+              if field not in config.splitlines():
+                  raise SystemExit("Wrong board flash/PSRAM configuration: " + field)
+          paths = [
+              "build/merged-binary.bin",
+              "build/bootloader/bootloader.bin",
+              "build/partition_table/partition-table.bin",
+              "build/seeed-xiao-esp32s3-pocket-ai.bin",
+              "build/flasher_args.json",
+          ]
+          for path in paths:
+              if not Path(path).is_file() or not Path(path).stat().st_size:
+                  raise SystemExit("Missing release build output: " + path)
+          merged_size = Path(paths[0]).stat().st_size
+          if merged_size > 8 * 1024 * 1024:
+              raise SystemExit("Merged firmware exceeds board flash capacity")
+          print(f"Validated XIAO ESP32-S3 identity; merged image {merged_size} bytes")
+          PY
+          mkdir -p release-assets
+          cp build/merged-binary.bin release-assets/xiao-esp32s3-pocket-ai-merged.bin
+          cp build/seeed-xiao-esp32s3-pocket-ai.bin release-assets/xiao-esp32s3-pocket-ai-app.bin
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile, ZIP_DEFLATED
+          parts=[
+              ("build/merged-binary.bin","merged-binary.bin"),
+              ("build/bootloader/bootloader.bin","bootloader.bin"),
+              ("build/partition_table/partition-table.bin","partition-table.bin"),
+              ("build/seeed-xiao-esp32s3-pocket-ai.bin","seeed-xiao-esp32s3-pocket-ai.bin"),
+              ("build/flasher_args.json","flasher_args.json"),
+          ]
+          output=Path("release-assets/xiao-esp32s3-pocket-ai-firmware.zip")
+          with ZipFile(output,"w",ZIP_DEFLATED) as archive:
+              for src,name in parts:
+                  archive.write(src,name)
+          with ZipFile(output) as archive:
+              if archive.testzip() is not None: raise SystemExit("Corrupt firmware ZIP")
+          PY
+          cd release-assets
+          sha256sum *.bin *.zip > SHA256SUMS.txt
+          sha256sum -c SHA256SUMS.txt
+      - uses: actions/upload-artifact@v7
+        with:
+          name: validated-xiao-firmware
+          path: release-assets/
+          if-no-files-found: error
+
+  publish:
+    needs: firmware
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          name: validated-xiao-firmware
+          path: release-assets
+      - name: Verify assets
+        run: cd release-assets && sha256sum -c SHA256SUMS.txt
+      - name: Prepare release notes
+        run: |
+          cat > release-notes.md <<'NOTES'
+          # Seeed Studio XIAO ESP32-S3 Pocket AI — experimental preview
+          **Not fully hardware-qualified.** For the ORIGINAL Seeed Studio XIAO ESP32-S3 with the documented ST7789, INMP441 and MAX98357A wiring. NOT for classic NodeMCU ESP32.
+
+          Download the 8MB-flash-compatible merged .bin for a factory/initial flash at offset 0x0. The standalone application .bin is supplied separately; use flasher_args.json/individual images in the ZIP to determine correct flash offsets. The ZIP contains bootloader, partition table, application and merged image. SHA256SUMS.txt provides checksums.
+
+          Important: writing a merged image at offset 0x0 may reset saved Wi-Fi/activation settings. For follow-up updates use the individual images and the generated flasher_args.json rather than assuming an application offset.
+
+          This firmware integrates XiaoZhi-based cloud voice protocols and the compact 240 x 280 animated portrait display. Model/service configuration requires compatible upstream activation; it does NOT contain a Gemini API key or use the separate NodeMCU Gemini/Vercel backend.
+
+          Host tests and compilation check software only. Speaker power, microphone sensitivity, panel orientation, Wi-Fi reconnect, battery safety, activation, and long-duration conversation still require physical-device testing. Check wiring and polarity before attaching a battery.
+
+          See README.md and README_XIAO_POCKET_AI.md in the source repository for board-specific flashing, setup, wiring, safety and validation.
+          NOTES
+      - name: Publish pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TAG=v0.1.0-preview.1
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" release-assets/* --clobber
+            gh release edit "$TAG" --title "XIAO ESP32-S3 Pocket AI v0.1.0 Preview 1" --prerelease --notes-file release-notes.md
+          else
+            gh release create "$TAG" release-assets/* --target "$GITHUB_SHA" --prerelease --title "XIAO ESP32-S3 Pocket AI v0.1.0 Preview 1" --notes-file release-notes.md
+          fi
+          gh release view "$TAG" --json url,isPrerelease,assets
