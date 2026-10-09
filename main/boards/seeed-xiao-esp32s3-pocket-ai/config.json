@@ -1,0 +1,27 @@
+{
+  "type": "seeed-xiao-esp32s3-pocket-ai",
+  "target": "esp32s3",
+  "builds": [
+    {
+      "name": "seeed-xiao-esp32s3-pocket-ai",
+      "sdkconfig_append": [
+        "CONFIG_ESPTOOLPY_FLASHSIZE_8MB=y",
+        "CONFIG_PARTITION_TABLE_CUSTOM_FILENAME=\"partitions/v2/8m.csv\"",
+        "CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y",
+        "CONFIG_ESP_CONSOLE_SECONDARY_NONE=y",
+        "CONFIG_SPIRAM_MEMTEST=y",
+        "CONFIG_SPIRAM_IGNORE_NOTFOUND=n",
+        "CONFIG_BOOTLOADER_SKIP_VALIDATE_ALWAYS=n",
+        "CONFIG_USE_DEFAULT_MESSAGE_STYLE=y",
+        "CONFIG_USE_AUDIO_PROCESSOR=y",
+        "CONFIG_USE_DEVICE_AEC=n",
+        "CONFIG_USE_SERVER_AEC=n",
+        "CONFIG_USE_HOTSPOT_WIFI_PROVISIONING=y",
+        "CONFIG_USE_ESP_BLUFI_WIFI_PROVISIONING=n",
+        "CONFIG_LV_MEM_SIZE_KILOBYTES=256",
+        "CONFIG_LV_USE_SNAPSHOT=n",
+        "CONFIG_LOG_DEFAULT_LEVEL_WARN=y"
+      ]
+    }
+  ]
+}
