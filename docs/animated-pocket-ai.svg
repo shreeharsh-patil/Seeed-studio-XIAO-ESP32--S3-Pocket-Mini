@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="420" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
+  <title id="title">Pocket AI animated preview</title>
+  <desc id="desc">An illustrated XIAO ESP32-S3 pocket assistant with blinking mint-colored eyes and an animated speech waveform. Concept illustration, not a photograph of the physical device.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#070c17"/><stop offset=".56" stop-color="#10162b"/><stop offset="1" stop-color="#080e19"/>
+    </linearGradient>
+    <linearGradient id="device" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#364255"/><stop offset=".5" stop-color="#172132"/><stop offset="1" stop-color="#0b101b"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#071a25"/><stop offset="1" stop-color="#09131e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#6de8cb"/><stop offset="1" stop-color="#87b7ff"/>
+    </linearGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+  </defs>
+  <rect width="960" height="420" rx="23" fill="url(#background)"/>
+  <circle cx="769" cy="181" r="161" fill="#48bbab" opacity=".09" filter="url(#glow)"/>
+  <circle cx="716" cy="195" r="125" fill="#6de8cb" opacity=".08" filter="url(#glow)"/>
+  <g fill="#83c9d4">
+    <circle cx="66" cy="70" r="2" opacity=".6"><animate attributeName="opacity" values=".2;.8;.2" dur="4s" repeatCount="indefinite"/></circle>
+    <circle cx="505" cy="325" r="3" opacity=".6"><animate attributeName="opacity" values=".7;.2;.7" dur="3.3s" repeatCount="indefinite"/></circle>
+    <circle cx="928" cy="84" r="2" opacity=".7"><animate attributeName="opacity" values=".2;.7;.2" dur="4.5s" repeatCount="indefinite"/></circle>
+  </g>
+  <rect x="60" y="62" width="126" height="29" rx="14" fill="#1b3741" stroke="#2c615d" stroke-width="1"/>
+  <circle cx="78" cy="76" r="4" fill="#6de8cb"><animate attributeName="opacity" values="1;.25;1" dur="2s" repeatCount="indefinite"/></circle>
+  <text x="92" y="81" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="700" letter-spacing="1.4" fill="#a6ecdf">OPEN SOURCE</text>
+  <text x="56" y="171" font-family="Arial,Helvetica,sans-serif" font-size="65" font-weight="800" letter-spacing="-2" fill="#f3faff">POCKET AI</text>
+  <text x="59" y="208" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="500" fill="#98b2cb">A tiny device. A voice. A personality.</text>
+  <path d="M59 233H425" stroke="#354a63" stroke-width="1"/>
+  <text x="60" y="268" font-family="Arial,Helvetica,sans-serif" font-size="16" fill="#d8e4f2">Seeed Studio XIAO ESP32-S3</text>
+  <g font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#a7d8d9">
+    <rect x="58" y="298" width="128" height="36" rx="18" fill="#18333d" stroke="#2c5358"/>
+    <text x="80" y="320">VOICE + AUDIO</text>
+    <rect x="198" y="298" width="105" height="36" rx="18" fill="#18333d" stroke="#2c5358"/>
+    <text x="220" y="320">ANIMATED UI</text>
+    <rect x="315" y="298" width="93" height="36" rx="18" fill="#18333d" stroke="#2c5358"/>
+    <text x="338" y="320">WI-FI</text>
+  </g>
+  <text x="59" y="369" font-family="Arial,Helvetica,sans-serif" font-size="12" fill="#7894ae" letter-spacing="1.3">ESP-IDF  /  ST7789  /  I2S</text>
+  <g>
+    <rect x="614" y="26" width="280" height="370" rx="39" fill="#030712" opacity=".5"/>
+    <rect x="609" y="18" width="280" height="370" rx="39" fill="url(#device)" stroke="#47576b" stroke-width="2"/>
+    <rect x="625" y="32" width="248" height="325" rx="21" fill="#050b12"/>
+    <rect x="629" y="37" width="240" height="280" rx="10" fill="url(#screen)" stroke="#315260" stroke-width="2"/>
+    <text x="646" y="63" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="600" fill="#eaf5ff">Pocket AI</text>
+    <g fill="none" stroke="#6de8cb" stroke-width="2" stroke-linecap="round">
+      <path d="M838 58q6 -7 12 0"/>
+      <path d="M841 62q3 -3 6 0"/>
+    </g>
+    <text x="749" y="111" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" font-size="14" fill="#eaf5ff">Ready to talk</text>
+    <g fill="#6de8cb">
+      <rect x="669" y="144" width="30" height="39" rx="12">
+        <animate attributeName="height" values="39;39;4;39;39" keyTimes="0;.42;.45;.48;1" dur="5s" repeatCount="indefinite"/>
+        <animate attributeName="y" values="144;144;161;144;144" keyTimes="0;.42;.45;.48;1" dur="5s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="799" y="144" width="30" height="39" rx="12">
+        <animate attributeName="height" values="39;39;4;39;39" keyTimes="0;.42;.45;.48;1" dur="5s" repeatCount="indefinite"/>
+        <animate attributeName="y" values="144;144;161;144;144" keyTimes="0;.42;.45;.48;1" dur="5s" repeatCount="indefinite"/>
+      </rect>
+    </g>
+    <g fill="url(#accent)">
+      <rect x="692" y="222" width="10" height="8" rx="5">
+        <animate attributeName="height" values="8;32;12;25;8" dur="1.4s" repeatCount="indefinite"/>
+        <animate attributeName="y" values="222;210;220;214;222" dur="1.4s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="713" y="216" width="10" height="20" rx="5">
+        <animate attributeName="height" values="20;9;38;15;20" dur="1.1s" repeatCount="indefinite"/>
+        <animate attributeName="y" values="216;222;207;219;216" dur="1.1s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="734" y="208" width="10" height="36" rx="5">
+        <animate attributeName="height" values="36;14;28;8;36" dur="1.3s" repeatCount="indefinite"/>
+        <animate attributeName="y" values="208;219;212;222;208" dur="1.3s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="755" y="216" width="10" height="20" rx="5">
+        <animate attributeName="height" values="20;38;9;26;20" dur="1.6s" repeatCount="indefinite"/>
+        <animate attributeName="y" values="216;207;222;213;216" dur="1.6s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="776" y="222" width="10" height="8" rx="5">
+        <animate attributeName="height" values="8;22;36;9;8" dur="1.2s" repeatCount="indefinite"/>
+        <animate attributeName="y" values="222;215;208;222;222" dur="1.2s" repeatCount="indefinite"/>
+      </rect>
+    </g>
+    <text x="749" y="288" font-family="Arial,Helvetica,sans-serif" text-anchor="middle" font-size="13" fill="#a4bcd1">Press button to talk</text>
+    <rect x="709" y="367" width="80" height="10" rx="5" fill="#05090f" stroke="#4c6579"/>
+    <circle cx="749" cy="344" r="7" fill="#52687f"/>
+  </g>
+  <text x="926" y="403" font-family="Arial,Helvetica,sans-serif" font-size="10" text-anchor="end" fill="#63859c">Illustration · animated concept</text>
+</svg>
